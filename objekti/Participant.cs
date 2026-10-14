@@ -7,8 +7,6 @@ public class Participant
     public int Level = 1;
     private int energy;
 
-
-# Konstruktors
     public Participant(string name, int energy)
     {
         Name = name;
