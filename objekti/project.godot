@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Objekti"
-run/main_scene="uid://46lwnc0rqkcd"
+run/main_scene="uid://b0w448w1glsh5"
 config/features=PackedStringArray("4.7", "C#", "GL Compatibility")
 config/icon="res://icon.svg"
 
