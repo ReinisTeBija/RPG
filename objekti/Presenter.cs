@@ -4,8 +4,9 @@ public partial class Presenter : Participant
     {
     }
 
-    public Presenter(string name) : base(name, 80)
+    public Presenter(string name) : base()
     {
+        Setup(name, 80);
     }
 
     public override void ApplyPenalty(int amount)

@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class Participant : Node
 {
@@ -7,41 +8,61 @@ public partial class Participant : Node
     public delegate void FinishedEventHandler(string participantName);
 
     public string ParticipantName = "Dalībnieks";
-    private int energy = 100;
-
-    public Participant()
-    {
-        ParticipantName = "Dalībnieks";
-        energy = 100;
-    }
-
-    public Participant(string name, int initialEnergy)
-    {
-        ParticipantName = name;
-        energy = Math.Max(0, initialEnergy);
-    }
+    private Stats stats = new Stats(100, 10);
+    private List<Buff> buffs = new List<Buff>();
 
     public void Setup(string name, int initialEnergy)
     {
         ParticipantName = name;
-        energy = Math.Max(0, initialEnergy);
+        stats = new Stats(Math.Max(0, initialEnergy), 10);
+        buffs.Clear();
     }
 
     public virtual void ApplyPenalty(int amount)
     {
         if (!IsActive() || amount <= 0) return;
-        energy = Math.Max(0, energy - amount);
-        if (energy == 0)
+        stats.Energy = Math.Max(0, stats.Energy - amount);
+        if (stats.Energy == 0)
             EmitSignal(SignalName.Finished, ParticipantName);
     }
 
     public int GetEnergy()
     {
-        return energy;
+        return stats.Energy;
     }
 
     public bool IsActive()
     {
-        return energy > 0;
+        return stats.Energy > 0;
+    }
+
+    public Stats GetStats()
+    {
+        return stats;
+    }
+
+    public void Heal(int amount)
+    {
+        if (IsActive()) stats.Heal(amount);
+    }
+
+    public void AddBuff(Buff buff)
+    {
+        buffs.Add(buff);
+    }
+
+    public void RemoveBuffAt(int index)
+    {
+        buffs.RemoveAt(index);
+    }
+
+    public int GetTotalFocus()
+    {
+        int total = stats.Focus;
+        foreach (Buff buff in buffs)
+        {
+            total += buff.FocusBonus;
+        }
+        return total;
     }
 }
